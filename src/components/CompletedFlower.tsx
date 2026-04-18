@@ -12,12 +12,9 @@ interface CompletedFlowerProps {
 const CompletedFlower: React.FC<CompletedFlowerProps> = ({
   delayMs = 0,
   animateOnLoad = true,
-  index = 0,
 }) => {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
   const [isReady, setIsReady] = useState(false);
-
-  const hueRotation = (index * 137) % 360;
 
   useEffect(() => {
     const instance = lottieRef.current;
@@ -44,7 +41,6 @@ const CompletedFlower: React.FC<CompletedFlowerProps> = ({
         autoplay={false}
         onDOMLoaded={() => setIsReady(true)}
         className={styles.lottieVisual}
-        style={{filter: `hue-rotate(${hueRotation}deg) brightness(1.05)`}}
       />
     </div>
   );

@@ -4,6 +4,9 @@ import CurrentYearFlower from '../../components/CurrentYearFlower';
 import styles from './home.module.scss';
 import CompletedFlower from '../../components/CompletedFlower';
 import Cat from '../../components/pets/cat/Cat';
+import { BiSolidCat } from "react-icons/bi"; 
+import { RxCross2 } from "react-icons/rx";
+import DailyMessage from '../../components/dailyMessage/DailyMessage';
 
 const MIN_FLOWER_SLOTS = 24;
 
@@ -39,7 +42,7 @@ const Home: React.FC = () => {
       <div className={styles.header}>
         <h1>Mi jardín para Emi</h1>
         <p>En este lugar va a existir una flor por cada mes que me regales a tu lado.</p>
-        <small>{completedFlowers + 1} flores</small>
+        <small>{completedFlowers} flores</small>
       </div>
 
       <button 
@@ -48,7 +51,7 @@ const Home: React.FC = () => {
         aria-label={catActive ? "Ocultar gato" : "Mostrar gato"}
         title={catActive ? "Guardar Pipi" : "Llamar a pipi"}
       >
-        {catActive ? "Guardar a Pipi" : "Llamar a Pipi"}
+        {catActive ? <RxCross2 size={'28px'} /> : <BiSolidCat size={'28px'} /> }
       </button>
 
       <div className={styles.scatteredGarden}>
@@ -59,7 +62,7 @@ const Home: React.FC = () => {
           
           const flowerDate = new Date(startDate);
           flowerDate.setMonth(startDate.getMonth() + index);
-          const label = flowerDate.toLocaleDateString('es-ES', { month: 'short', year: '2-digit' }).toUpperCase();
+          const label = flowerDate.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }).toUpperCase();
 
           const style = {
             top: `${pos.top}%`,
@@ -78,13 +81,13 @@ const Home: React.FC = () => {
               <div className={styles.flowerVisual}>
                 {isHistorical && <>
                   <div className={styles.flowerLabel}>
-                    {isCurrentFlower ? 'Creciendo 🌱' : label}
+                    {label}
                   </div>
                   <CompletedFlower delayMs={index * 90} index={index}/>
                 </>}
                 {isCurrentFlower && <>
                   <div className={styles.flowerLabel}>
-                    {label}
+                    {isCurrentFlower ? 'Creciendo 🌱' : label}
                   </div>
                   <CurrentYearFlower progress={currentProgress} />
                 </>}
@@ -93,6 +96,7 @@ const Home: React.FC = () => {
           );
         })}
       </div>
+      <DailyMessage />
     </div>
   );
 };
