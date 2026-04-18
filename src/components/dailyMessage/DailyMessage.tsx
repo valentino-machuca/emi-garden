@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { CSSProperties } from 'react';
-import { WiDayCloudy } from 'react-icons/wi';
+import { IoMdHeart } from "react-icons/io";
 import { ROMANTIC_MESSAGES } from './data/messages';
 
 const DailyMessage = () => {
@@ -38,7 +38,7 @@ const DailyMessage = () => {
         onClick={() => setShowToast(!showToast)}
         aria-label="Mensaje del día"
       >
-        <WiDayCloudy style={iconStyle} />
+        <IoMdHeart style={iconStyle} />
         <span style={chipTitle}>Mensaje del día</span>
       </button>
     </div>
