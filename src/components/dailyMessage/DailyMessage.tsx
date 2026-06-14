@@ -13,7 +13,13 @@ const DailyMessage = () => {
   const oneDay = 1000 * 60 * 60 * 24;
   const dayOfYear = Math.floor(diff / oneDay);
   const messageIndex = dayOfYear % ROMANTIC_MESSAGES.length;
-  const todayMessage = ROMANTIC_MESSAGES[messageIndex];
+  
+  let todayMessage = ROMANTIC_MESSAGES[messageIndex];
+
+  // Especial para el aniversario
+  if (now.getMonth() === 5 && now.getDate() === 15) {
+    todayMessage = "¡Feliz aniversario, mi amor! ❤️❤️❤️ ";
+  }
 
   useEffect(() => {
     if (showToast) {

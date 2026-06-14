@@ -6,18 +6,29 @@ export const useGarden = (startDate: Date) => {
     const start = new Date(startDate);
 
     if (now < start) return { completedFlowers: 0, currentProgress: 0, currentYearLabel: 'Aún no comienza' };
-    let totalMonths = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
-    
-    const isBeforeAnniversaryDay = now.getDate() < start.getDate();
-    if (isBeforeAnniversaryDay) totalMonths--;
 
-    const completedFlowers = Math.max(0, totalMonths);
-    const last15 = new Date(now.getFullYear(), now.getMonth() - (isBeforeAnniversaryDay ? 1 : 0), start.getDate());
-    const next15 = new Date(now.getFullYear(), now.getMonth() + (isBeforeAnniversaryDay ? 0 : 1), start.getDate());
+    // Calculamos la diferencia total de meses
+    let months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
     
-    const diffTotal = next15.getTime() - last15.getTime();
-    const diffElapsed = now.getTime() - last15.getTime();
-    const currentProgress = (diffElapsed / diffTotal) * 100;
+    // Si aún no llegamos al día del aniversario este mes, el mes actual no se ha completado.
+    if (now.getDate() < start.getDate()) {
+      months--;
+    }
+
+    const completedFlowers = Math.max(0, months);
+
+    // Para el progreso: calculamos el inicio del periodo actual y el final del mismo
+    const currentPeriodStart = new Date(start);
+    currentPeriodStart.setMonth(start.getMonth() + completedFlowers);
+
+    const nextPeriodStart = new Date(start);
+    nextPeriodStart.setMonth(start.getMonth() + completedFlowers + 1);
+
+    const diffTotal = nextPeriodStart.getTime() - currentPeriodStart.getTime();
+    const diffElapsed = now.getTime() - currentPeriodStart.getTime();
+    
+    // El progreso es cuánto ha pasado desde que se plantó la última flor completada
+    const currentProgress = Math.min(100, Math.max(0, (diffElapsed / diffTotal) * 100));
 
     const label = now.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
 

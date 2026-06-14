@@ -6,7 +6,9 @@ import CompletedFlower from '../../components/CompletedFlower';
 import Cat from '../../components/pets/cat/Cat';
 import { BiSolidCat } from "react-icons/bi"; 
 import { RxCross2 } from "react-icons/rx";
+import { IoMdHeart } from "react-icons/io";
 import DailyMessage from '../../components/dailyMessage/DailyMessage';
+import AnniversaryModal from '../../components/AnniversaryModal';
 
 const MIN_FLOWER_SLOTS = 24;
 
@@ -19,13 +21,18 @@ interface Position {
 
 const Home: React.FC = () => {
   const [catActive, setCatActive] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-  const startDate = new Date('2025-06-15');
+  const startDate = new Date('2025-06-15T00:00:00');
   const { completedFlowers, currentProgress } = useGarden(startDate);
   const totalSlots = Math.max(MIN_FLOWER_SLOTS, completedFlowers + 1);
-  
+
   const [positions, setPositions] = useState<Position[]>([]);
+
+  // Lógica para mostrar el botón de aniversario a partir del 15/06/2026
+  const now = new Date();
+  const anniversaryDate = new Date('2026-06-15T00:00:00');
+  const showAnniversaryButton = now >= anniversaryDate;
 
   useEffect(() => {
     const newPositions = Array.from({ length: totalSlots }).map(() => ({
@@ -45,30 +52,47 @@ const Home: React.FC = () => {
         <small>{completedFlowers} flores</small>
       </div>
 
-      <button 
-        className={styles.catToggleBtn}
-        onClick={() => setCatActive(prev => !prev)}
-        aria-label={catActive ? "Ocultar gato" : "Mostrar gato"}
-        title={catActive ? "Guardar Pipi" : "Llamar a pipi"}
-      >
-        {catActive ? <RxCross2 size={'28px'} /> : <BiSolidCat size={'28px'} /> }
-      </button>
+      <div className={styles.controls}>
+        <button 
+          className={styles.catToggleBtn}
+          onClick={() => setCatActive(prev => !prev)}
+          aria-label={catActive ? "Ocultar gato" : "Mostrar gato"}
+          title={catActive ? "Guardar Pipi" : "Llamar a pipi"}
+        >
+          {catActive ? <RxCross2 size={'28px'} /> : <BiSolidCat size={'28px'} /> }
+        </button>
+
+        {showAnniversaryButton && (
+          <button 
+            className={styles.anniversaryBtn}
+            onClick={() => setIsModalOpen(true)}
+            aria-label="Sorpresa de aniversario"
+          >
+            <IoMdHeart size={'28px'} />
+          </button>
+        )}
+      </div>
 
       <div className={styles.scatteredGarden}>
         {catActive && <Cat />}
         {positions.map((pos, index) => {
           const isHistorical = index < completedFlowers;
           const isCurrentFlower = index === completedFlowers;
+          const isOneYearAnniversary = index === 11;
           
           const flowerDate = new Date(startDate);
           flowerDate.setMonth(startDate.getMonth() + index);
-          const label = flowerDate.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }).toUpperCase();
+          let label = flowerDate.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }).toUpperCase();
+
+          if (isOneYearAnniversary) {
+            label = "PRIMER AÑO";
+          }
 
           const style = {
             top: `${pos.top}%`,
             left: `${pos.left}%`,
-            transform: `scale(${isCurrentFlower ? 1.2 : pos.scale})`,
-            zIndex: isCurrentFlower ? 100 : Math.floor(pos.top),
+            transform: `scale(${isOneYearAnniversary ? 1.5 : (isCurrentFlower ? 1.2 : pos.scale)})`,
+            zIndex: isOneYearAnniversary ? 200 : (isCurrentFlower ? 100 : Math.floor(pos.top)),
           };
 
           return (
@@ -77,26 +101,32 @@ const Home: React.FC = () => {
                     ${styles.flowerWrapper} 
                     ${isCurrentFlower ? styles.currentWrapper : styles.historicalWrapper}
                     ${index == 0 ? styles.anniversaryFlower : ''}
+                    ${isOneYearAnniversary ? styles.oneYearSpecial : ''}
                   `} style={style}>
               <div className={styles.flowerVisual}>
-                {isHistorical && <>
-                  <div className={styles.flowerLabel}>
-                    {label}
-                  </div>
-                  <CompletedFlower delayMs={index * 90} index={index}/>
-                </>}
-                {isCurrentFlower && <>
-                  <div className={styles.flowerLabel}>
-                    {isCurrentFlower ? 'Creciendo 🌱' : label}
-                  </div>
-                  <CurrentYearFlower progress={currentProgress} />
-                </>}
+                {isHistorical && (
+                  <>
+                    <div className={styles.flowerLabel}>
+                      {label}
+                    </div>
+                    <CompletedFlower delayMs={index * 90} index={index}/>
+                  </>
+                )}
+                {isCurrentFlower && (
+                  <>
+                    <div className={styles.flowerLabel}>
+                      Creciendo 🌱
+                    </div>
+                    <CurrentYearFlower progress={currentProgress} />
+                  </>
+                )}
               </div>
             </div>
           );
         })}
       </div>
       <DailyMessage />
+      <AnniversaryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };
