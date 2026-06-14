@@ -114,7 +114,7 @@ export const ROMANTIC_MESSAGES: string[] = [
   "Admiro tu integridad y la forma en la que defiendes tus ideas.",
   "Gracias por estar en las duras, en las maduras y en las aburridas.",
   "Me gusta que seamos capaces de pedir perdón y aprender.",
-  "Contigo he aprendido que el amor no duele, el amor construye.",
+  "Con vos aprendí que el amor no duele, el amor construye.",
   "Qué suerte la mía compartir mi tiempo con alguien como tú.",
   "Gracias por ser mi confidente y mi mejor crítica.",
   "Hoy celebramos todo el camino recorrido y lo que falta.",
