@@ -184,14 +184,14 @@
 
 .controls {
   position: fixed;
-  bottom: 3rem;
+  bottom: 2rem;
   right: 2rem;
   display: flex;
-  gap: 1.2rem;
+  gap: 1rem;
   z-index: 10000;
 }
 
-.catToggleBtn, .anniversaryBtn {
+.catToggleBtn, .anniversaryBtn, .birthdayBtn {
   width: 3.8rem;
   height: 3.8rem;
   border-radius: 50%;
@@ -224,6 +224,24 @@
   &:hover {
     background-color: #fcd5ce;
   }
+}
+
+.birthdayBtn {
+  background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);
+  color: white;
+  animation: cakeBounce 2.5s ease-in-out infinite;
+
+  &:hover {
+    background: linear-gradient(135deg, #ffc300 0%, #ffb703 100%);
+  }
+}
+
+@keyframes cakeBounce {
+  0%, 100% { transform: scale(1); box-shadow: 0 8px 20px rgba(251, 133, 0, 0.35); }
+  15% { transform: scale(1.1) rotate(-4deg); box-shadow: 0 12px 25px rgba(251, 133, 0, 0.5); }
+  30% { transform: scale(1) rotate(4deg); }
+  45% { transform: scale(1.08) rotate(0deg); }
+  70% { transform: scale(1); }
 }
 
 @keyframes heartBeat {
@@ -263,13 +281,14 @@
   }
 
   .controls {
-    bottom: 4rem;
-    right: 1.5rem;
-    gap: 1rem;
+    bottom: 1.5rem;
+    right: 1rem;
+    flex-direction: column-reverse;
+    gap: 0.75rem;
   }
 
-  .catToggleBtn, .anniversaryBtn {
-    width: 3.5rem;
-    height: 3.5rem;
+  .catToggleBtn, .anniversaryBtn, .birthdayBtn {
+    width: 3.2rem;
+    height: 3.2rem;
   }
 }

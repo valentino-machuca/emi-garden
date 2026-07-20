@@ -7,8 +7,10 @@ import Cat from '../../components/pets/cat/Cat';
 import { BiSolidCat } from "react-icons/bi"; 
 import { RxCross2 } from "react-icons/rx";
 import { IoMdHeart } from "react-icons/io";
+import { FaCakeCandles } from "react-icons/fa6";
 import DailyMessage from '../../components/dailyMessage/DailyMessage';
 import AnniversaryModal from '../../components/AnniversaryModal';
+import BirthdayModal from '../../components/BirthdayModal';
 
 const MIN_FLOWER_SLOTS = 24;
 
@@ -22,6 +24,7 @@ interface Position {
 const Home: React.FC = () => {
   const [catActive, setCatActive] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBirthdayModalOpen, setIsBirthdayModalOpen] = useState(false);
 
   const startDate = new Date('2025-06-15T00:00:00');
   const { completedFlowers, currentProgress } = useGarden(startDate);
@@ -33,6 +36,10 @@ const Home: React.FC = () => {
   const now = new Date();
   const anniversaryDate = new Date('2026-06-15T00:00:00');
   const showAnniversaryButton = now >= anniversaryDate;
+
+  // Lógica para mostrar el botón de cumpleaños a partir del 20/07/2026
+  const birthdayDate = new Date('2026-07-20T00:00:00');
+  const showBirthdayButton = now >= birthdayDate;
 
   useEffect(() => {
     const newPositions = Array.from({ length: totalSlots }).map(() => ({
@@ -69,6 +76,17 @@ const Home: React.FC = () => {
             aria-label="Sorpresa de aniversario"
           >
             <IoMdHeart size={'28px'} />
+          </button>
+        )}
+
+        {showBirthdayButton && (
+          <button 
+            className={styles.birthdayBtn}
+            onClick={() => setIsBirthdayModalOpen(true)}
+            aria-label="Sorpresa de cumpleaños"
+            title="¡Feliz cumpleaños!"
+          >
+            <FaCakeCandles size={'26px'} />
           </button>
         )}
       </div>
@@ -127,6 +145,7 @@ const Home: React.FC = () => {
       </div>
       <DailyMessage />
       <AnniversaryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <BirthdayModal isOpen={isBirthdayModalOpen} onClose={() => setIsBirthdayModalOpen(false)} />
     </div>
   );
 };
