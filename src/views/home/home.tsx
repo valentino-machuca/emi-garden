@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useGarden } from '../../hooks/useGarden';
-import CurrentYearFlower from '../../components/CurrentYearFlower';
 import styles from './home.module.scss';
 import CompletedFlower from '../../components/CompletedFlower';
 import Cat from '../../components/pets/cat/Cat';
 import { BiSolidCat } from "react-icons/bi"; 
 import { RxCross2 } from "react-icons/rx";
-import { IoMdHeart } from "react-icons/io";
-import { FaCakeCandles } from "react-icons/fa6";
-import DailyMessage from '../../components/dailyMessage/DailyMessage';
-import AnniversaryModal from '../../components/AnniversaryModal';
-import BirthdayModal from '../../components/BirthdayModal';
 
 const MIN_FLOWER_SLOTS = 24;
 
@@ -23,23 +17,23 @@ interface Position {
 
 const Home: React.FC = () => {
   const [catActive, setCatActive] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isBirthdayModalOpen, setIsBirthdayModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isBirthdayModalOpen, setIsBirthdayModalOpen] = useState(false);
 
   const startDate = new Date('2025-06-15T00:00:00');
-  const { completedFlowers, currentProgress } = useGarden(startDate);
+  const { completedFlowers } = useGarden(startDate);
   const totalSlots = Math.max(MIN_FLOWER_SLOTS, completedFlowers + 1);
 
   const [positions, setPositions] = useState<Position[]>([]);
 
   // Lógica para mostrar el botón de aniversario a partir del 15/06/2026
-  const now = new Date();
-  const anniversaryDate = new Date('2026-06-15T00:00:00');
-  const showAnniversaryButton = now >= anniversaryDate;
+  // const now = new Date('2026-07-16T00:00:00');
+  // const anniversaryDate = new Date('2026-06-15T00:00:00');
+  // const showAnniversaryButton = now >= anniversaryDate;
 
   // Lógica para mostrar el botón de cumpleaños a partir del 20/07/2026
-  const birthdayDate = new Date('2026-07-20T00:00:00');
-  const showBirthdayButton = now >= birthdayDate;
+  // const birthdayDate = new Date('2026-07-20T00:00:00');
+  // const showBirthdayButton = now >= birthdayDate;
 
   useEffect(() => {
     const newPositions = Array.from({ length: totalSlots }).map(() => ({
@@ -55,7 +49,7 @@ const Home: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Mi jardín para Emi</h1>
-        <p>En este lugar va a existir una flor por cada mes que me regales a tu lado.</p>
+        <p>En este lugar existe una flor por cada mes que me regalaste a tu lado.</p>
         <small>{completedFlowers} flores</small>
       </div>
 
@@ -68,27 +62,6 @@ const Home: React.FC = () => {
         >
           {catActive ? <RxCross2 size={'28px'} /> : <BiSolidCat size={'28px'} /> }
         </button>
-
-        {showAnniversaryButton && (
-          <button 
-            className={styles.anniversaryBtn}
-            onClick={() => setIsModalOpen(true)}
-            aria-label="Sorpresa de aniversario"
-          >
-            <IoMdHeart size={'28px'} />
-          </button>
-        )}
-
-        {showBirthdayButton && (
-          <button 
-            className={styles.birthdayBtn}
-            onClick={() => setIsBirthdayModalOpen(true)}
-            aria-label="Sorpresa de cumpleaños"
-            title="¡Feliz cumpleaños!"
-          >
-            <FaCakeCandles size={'26px'} />
-          </button>
-        )}
       </div>
 
       <div className={styles.scatteredGarden}>
@@ -130,22 +103,22 @@ const Home: React.FC = () => {
                     <CompletedFlower delayMs={index * 90} index={index}/>
                   </>
                 )}
-                {isCurrentFlower && (
+                {/* {isCurrentFlower && (
                   <>
                     <div className={styles.flowerLabel}>
                       Creciendo 🌱
                     </div>
                     <CurrentYearFlower progress={currentProgress} />
                   </>
-                )}
+                )} */}
               </div>
             </div>
           );
         })}
       </div>
-      <DailyMessage />
-      <AnniversaryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <BirthdayModal isOpen={isBirthdayModalOpen} onClose={() => setIsBirthdayModalOpen(false)} />
+      {/* <DailyMessage /> */}
+      {/* <AnniversaryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
+      {/* <BirthdayModal isOpen={isBirthdayModalOpen} onClose={() => setIsBirthdayModalOpen(false)} /> */}
     </div>
   );
 };
