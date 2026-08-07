@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 export const useGarden = (startDate: Date) => {
   return useMemo(() => {
-    const now = new Date();
+    const now = new Date('2026-07-16T00:00:00');
     const start = new Date(startDate);
 
     if (now < start) return { completedFlowers: 0, currentProgress: 0, currentYearLabel: 'Aún no comienza' };
